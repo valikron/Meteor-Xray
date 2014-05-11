@@ -1,0 +1,30 @@
+<template name="test_layout">
+    {{#if renderQueue.a}}
+        {{> template_a}}
+    {{/if}}
+    {{#if renderQueue.b}}
+        {{> template_b}}
+    {{/if}}
+    {{#if renderQueue.c}}
+        {{> template_c}}
+    {{/if}}
+    {{#if renderQueue.d}}
+        {{> template_d}}
+    {{/if}}
+</template>
+
+<template name="template_a">
+    :)
+</template>
+
+<template name="template_b">
+    x)
+</template>
+
+<template name="template_c">
+    :P
+</template>
+
+<template name="template_d">
+    0.0
+</template>

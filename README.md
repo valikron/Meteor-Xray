@@ -1,4 +1,8 @@
 Meteor-Xray
-===========
+========================
 
-Reveal templates names in your meteor project
+Reveal template names in your meteor project.
+
+
+![Screenshot](https://raw.githubusercontent.com/krevativ/Meteor-Xray/master/xray.png)
+[Template: freelancer](http://startbootstrap.com/freelancer)
