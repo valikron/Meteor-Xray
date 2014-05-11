@@ -11,8 +11,16 @@ Reveal template names in your meteor project.
 
 Clone it to your project:
 
-    git clone https://github.com/krevativ/Meteor-Xray.git /[projectpath]/packages/xray
+    git clone https://github.com/krevativ/Meteor-Xray.git
 
 Add the package:
+
+    meteor add Meteor-Xray
+
+Or specify the folder:
+
+    git clone https://github.com/krevativ/Meteor-Xray.git /[projectpath]/packages/xray
+
+And add the package:
 
     meteor add xray
