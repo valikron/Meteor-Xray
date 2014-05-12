@@ -49,7 +49,7 @@ Template.rendered(null, function () {
     var self = this;
 
     if(self.templateName !== 'xray'){
-        // tamplate has only one child
+        // get direct childs
         var childs = self.findAll('>*');
 
         _.each(childs, function(child){
