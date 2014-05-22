@@ -24,7 +24,7 @@
     position: relative;
 }
 
-.xray-visible .xray-label {
+.xray-visible .xray-label-container {
     position: absolute;
     top: 0;
     left: 0;
@@ -34,15 +34,19 @@
     display: block;
 }
 
-.xray-visible .xray-label div{
-    position: absolute;
-    top: 0;
-    left: 0;
+.xray-visible .xray-label-container .xray-label{
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+    font-size: 1.4rem !important;
+    font-weight: 400 !important;
     padding: 3px 7px;
     background-color: rgba(31, 87, 208, 0.42);
     color: #f1f0f5;
     text-align: center;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
-    font-size: 1.4rem !important;
-    text-transform: uppercase !important;
+    text-transform: none !important;
+}
+
+.xray-visible .xray-label-container .xray-label {
+    position: absolute;
+    top: 0;
+    left: 0;
 }
