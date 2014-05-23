@@ -6,6 +6,7 @@ Package.on_use(function(api) {
     api.use(['templating', 'underscore'], ['client']);
 
     api.add_files([
+        'client/lib/DOMtastic.js',
         'client/lib/polyfills.js',
         'client/lib/multiple_callbacks.js',
         'client/xray.html',

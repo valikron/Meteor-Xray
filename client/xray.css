@@ -17,10 +17,11 @@
 
 .xray .xray-label {
     display: none;
+    visibility: hidden;
 }
 
 .xray-visible {
-    border: 2px solid #1f57d0 !important;
+    border: 2px solid rgb(41, 128, 185) !important;
     position: relative;
 }
 
@@ -32,6 +33,21 @@
     bottom: 0;
     background-color: rgba(8, 66, 134, 0.42);
     display: block;
+    visibility: visible;
+    -webkit-transform: translate3d(0,0,0);
+    -moz-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
+    -webkit-transition: border 500ms;
+    -moz-transition: border 500ms;
+    transition: border 500ms;
+}
+
+.xray-visible .xray-label-container.xray-active {
+    background-color: rgba(8, 66, 134, 0.12);
+}
+
+.xray-visible .xray-label-container.xray-inactive {
+    background-color: rgba(8, 66, 134, 0.42);
 }
 
 .xray-visible .xray-label-container .xray-label{
@@ -39,10 +55,61 @@
     font-size: 1.4rem !important;
     font-weight: 400 !important;
     padding: 3px 7px;
-    background-color: rgba(31, 87, 208, 0.42);
-    color: #f1f0f5;
+    background-color: rgba(41, 128, 185, 0.42);
+    color: #FFFFFF;
     text-align: center;
     text-transform: none !important;
+}
+
+.xray-visible .xray-label-container.xray-active .xray-label{
+    font-size: 1.7rem !important;
+    background-color: rgba(41, 128, 185, 0.9);
+}
+
+.xray-visible .xray-label-container.xray-inactive .xray-label{
+    font-size: 1.4rem !important;
+    background-color: rgba(41, 128, 185, 0.42);
+}
+.xray-visible .xray-label-container .xray-label .xray-extra,
+.xray-visible .xray-label-container.xray-inactive .xray-label .xray-extra {
+    display: none;
+}
+
+.xray-visible .xray-label-container.xray-active .xray-label .xray-extra {
+    display: block;
+    position: absolute;
+    top: 2.4em;
+    left: 7px;
+    background-color: rgb(255,255,255);
+    color: rgba(41, 128, 185, 0.9);
+    font-weight: 400 !important;
+    padding: 14px;
+    min-width: 240px;
+    border-radius: 3px;
+    text-align: left !important;
+    font-size: 1.4rem !important;
+}
+
+.xray-visible .xray-label-container.xray-active .xray-label .xray-extra .xray-extra-devider {
+    padding: 5px 0;
+    font-weight: 700 !important;
+}
+
+.xray-visible .xray-label-container.xray-active .xray-label .xray-extra .xray-extra-devider .xray-extra-value {
+    padding: 0 5px;
+    font-weight: 400 !important;
+}
+
+.xray-visible .xray-label-container.xray-active .xray-label .xray-extra:before {
+    content: ' ';
+    position: absolute;
+    top: -8px;
+    left: 8px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 16px solid rgb(255,255,255);
 }
 
 .xray-visible .xray-label-container .xray-label {
