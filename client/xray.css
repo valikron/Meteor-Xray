@@ -43,7 +43,7 @@
 }
 
 .xray-visible .xray-label-container.xray-active {
-    background-color: rgba(8, 66, 134, 0.12);
+    background-color: rgba(8, 66, 134, 0.13);
 }
 
 .xray-visible .xray-label-container.xray-inactive {
@@ -59,6 +59,7 @@
     color: #FFFFFF;
     text-align: center;
     text-transform: none !important;
+    letter-spacing: 0.02rem !important;
 }
 
 .xray-visible .xray-label-container.xray-active .xray-label{
@@ -78,21 +79,25 @@
 .xray-visible .xray-label-container.xray-active .xray-label .xray-extra {
     display: block;
     position: absolute;
-    top: 2.4em;
+    top: 3.3em;
     left: 7px;
-    background-color: rgb(255,255,255);
+    background-color: rgb(243,253,243);
+    border: 1px solid rgb(255,255,255);
     color: rgba(41, 128, 185, 0.9);
     font-weight: 400 !important;
-    padding: 14px;
-    min-width: 240px;
+    padding: 7px 14px 9px;
+    min-width: 200px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
     border-radius: 3px;
     text-align: left !important;
-    font-size: 1.4rem !important;
+    font-size: 1.2rem !important;
 }
 
 .xray-visible .xray-label-container.xray-active .xray-label .xray-extra .xray-extra-devider {
-    padding: 5px 0;
+    padding: 4px 0;
     font-weight: 700 !important;
+    font-size: 1.4rem;
 }
 
 .xray-visible .xray-label-container.xray-active .xray-label .xray-extra .xray-extra-devider .xray-extra-value {
@@ -100,16 +105,33 @@
     font-weight: 400 !important;
 }
 
+.xray-visible .xray-label-container.xray-active .xray-label .xray-extra .xray-extra-devider .xray-extra-value .xray-keyName {
+    color: rgb(21, 138, 165);
+    font-weight: 500 !important;
+    font-size: 1.3rem;
+}
+
+.xray-visible .xray-label-container.xray-active .xray-label .xray-extra .xray-extra-devider .xray-extra-value:nth-of-type(odd) {
+    background-color: rgba(223,233,223,.4);
+    border-bottom: 1px solid rgb(200,223,233);
+    padding: 2px 4px;
+}
+.xray-visible .xray-label-container.xray-active .xray-label .xray-extra .xray-extra-devider .xray-extra-value:nth-of-type(even) {
+    background-color: rgba(203,213,203,.4);
+    border-bottom: 1px solid rgb(200,223,233);
+    padding: 2px 4px;
+}
+
 .xray-visible .xray-label-container.xray-active .xray-label .xray-extra:before {
     content: ' ';
     position: absolute;
-    top: -8px;
+    top: -9px;
     left: 8px;
     width: 0;
     height: 0;
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
-    border-bottom: 16px solid rgb(255,255,255);
+    border-bottom: 16px solid rgb(243,253,243);
 }
 
 .xray-visible .xray-label-container .xray-label {
