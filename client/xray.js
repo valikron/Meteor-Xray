@@ -1,32 +1,12 @@
 var xrayVisible = false;
 var rayCounter = 0;
 var systemProperties = ['guid','__helperHost','created','destroyed','_events','events','__proto__','render','rendered','set','parent','preserve','dom','extend','get','helpers','instantiate','isDestroyed','isInited','kind','lookup','lookupTemplate','notifyParented'];
+var xrayRegionsLength = 0;
+var xrayRegions = [];
 
 Meteor.startup(function() {
     UI.materialize(Template.xray, document.body);
     Session.set('xray-label', 'xray on');
-});
-
-Template.xray.label = function() {
-    return Session.get('xray-label');
-};
-
-Template.xray.events({
-    'click button': function(e, tpl) {
-        var regions = document.body.querySelectorAll( (xrayVisible) ? '.xray-visible' : '.xray' );
-
-        Session.set('xray-label', (xrayVisible) ? 'xray on' : 'xray off');
-
-        _.each(regions, function(region) {
-            if (xrayVisible) {
-                region.className = region.className.replace(' xray-visible', ' xray');
-            } else {
-                region.className = region.className.replace(' xray', ' xray-visible');
-            }
-        });
-
-        xrayVisible = !xrayVisible;
-    }
 });
 
 var attrListFromObject = function(object) {
@@ -112,7 +92,6 @@ var renderToDiv = function(options) {
     extra.className = 'xray-extra';
     innderDiv.appendChild(extra);
 
-
     renderAttrListToDiv('Attributes', options.attributesList, extra);
     renderAttrListToDiv('Helpers', options.helpersList, extra);
     renderAttrListToDiv('Events', options.events, extra);
@@ -122,8 +101,35 @@ var renderToDiv = function(options) {
     return div;
 };
 
-var xrayRegionsLength = 0;
-var xrayRegions = [];
+Template.xray.label = function() {
+    return Session.get('xray-label');
+};
+
+Template.xray.events({
+    'click button': function(e, tpl) {
+        var regions = document.body.querySelectorAll( (xrayVisible) ? '.xray-visible' : '.xray' );
+        e.stopPropagation();
+
+        Session.set('xray-label', (xrayVisible) ? 'xray on' : 'xray off');
+
+        _.each(regions, function(region) {
+            if (xrayVisible) {
+                region.className = region.className.replace(' xray-visible', ' xray');
+            } else {
+                region.className = region.className.replace(' xray', ' xray-visible');
+            }
+        });
+
+        xrayVisible = !xrayVisible;
+
+        if(!xrayVisible) {
+            _.each(xrayRegions, function(elm) {
+                cleanupElement(elm, 1);
+            });
+        }
+    }
+});
+
 Template.rendered(null, function() {
     var self = this;
 
@@ -150,6 +156,9 @@ Template.rendered(null, function() {
         });
 
         document.addEventListener('mousemove', function(evt) {
+            if (!xrayVisible)
+                return;
+
             evt = (evt) ? evt : ((window.event) ? window.event : "");
 
             minSize = {};
