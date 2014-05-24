@@ -1,7 +1,6 @@
 var xrayVisible = false;
-var rayCounter = 0;
-var systemProperties = ['guid','__helperHost','created','destroyed','_events','events','__proto__','render','rendered','set','parent','preserve','dom','extend','get','helpers','instantiate','isDestroyed','isInited','kind','lookup','lookupTemplate','notifyParented'];
-var xrayRegionsLength = 0;
+var rayCount = 0;
+var sysProperties = ['guid','__helperHost','created','destroyed','_events','events','__proto__','render','rendered','set','parent','preserve','dom','extend','get','helpers','instantiate','isDestroyed','isInited','kind','lookup','lookupTemplate','notifyParented'];
 var xrayRegions = [];
 
 Meteor.startup(function() {
@@ -82,7 +81,7 @@ var renderToDiv = function(options) {
         extra = document.createElement('DIV'),
         performTimeLabel = document.createElement('DIV');
 
-    rayCounter++;
+    rayCount++;
 
     innderDiv.className = 'xray-label';
     div.appendChild(innderDiv);
@@ -96,7 +95,7 @@ var renderToDiv = function(options) {
     renderAttrListToDiv('Helpers', options.helpersList, extra);
     renderAttrListToDiv('Events', options.events, extra);
 
-    div.className = ' xray-label-container xray-id-' + rayCounter;
+    div.className = ' xray-label-container xray-id-' + rayCount;
     UI.materialize(options.tplName, innderDiv);
     return div;
 };
@@ -124,7 +123,7 @@ Template.xray.events({
 
         if(!xrayVisible) {
             _.each(xrayRegions, function(elm) {
-                cleanupElement(elm, 1);
+                cleanupElement(elm, null);
             });
         }
     }
@@ -137,7 +136,7 @@ Template.rendered(null, function() {
 
         var childs = self.findAll('>*'),
             mousePos = [0, 0],
-            attributes = _.omit(self.__component__.__proto__, systemProperties),
+            attributes = _.omit(self.__component__.__proto__, sysProperties),
             renderOptions = {},
             templateLabel,
             minSize;
