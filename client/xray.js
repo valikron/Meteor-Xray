@@ -54,8 +54,7 @@ var attributeListFromObject = function(object) {
 
 var store_boundary = function(box) {
     var box_area = {};
-
-    offset = box.offset();
+    var offset = box.offset();
 
     box_area = {
         x1: offset.left,
@@ -81,11 +80,13 @@ var is_mouse_in_area = function(pos, box_area) {
 var renderAttributeListToDiv = function(name, list, parent) {
     if (list.length) {
         var container = document.createElement('DIV');
+        var attribute;
+
         container.innerHTML = name + ':';
         container.className = ' xray-extra-devider';
 
         _.each(list, function(item) {
-            var attribute = document.createElement('DIV');
+            attribute = document.createElement('DIV');
             attribute.className = ' xray-extra-value';
             attribute.innerHTML = '<span class="xray-keyName"> ' + item.keyName + ' </span> : ' + item.returnType;
             container.appendChild(attribute);
@@ -169,6 +170,7 @@ Template.rendered(null, function() {
         ]);
 
         var renderOptions = {};
+        var templateLabel;
 
         renderOptions.tplName = self.templateName;
         renderOptions.performTime = self.performTime;
@@ -177,7 +179,7 @@ Template.rendered(null, function() {
         renderOptions.events = attributeListFromObject(self.__component__.__proto__.events);
 
         _.each(childs, function(child) {
-            var templateLabel = renderToDiv(renderOptions);
+            templateLabel = renderToDiv(renderOptions);
             xrayRegions.push(templateLabel);
             child.className += ' xray';
             child.insertBefore(templateLabel, child.firstNode);
@@ -222,13 +224,11 @@ Template.rendered(null, function() {
                         }
                     });
 
-                } else {
-                    if (elm.active) {
-                        elm.active = false;
-                        elm.style.zIndex = null;
-                        elm.style.border = '';
-                        elm.className = elm.className.replace(' xray-active', ' xray-inactive');
-                    }
+                } else if (elm.active) {
+                    elm.active = false;
+                    elm.style.zIndex = null;
+                    elm.style.border = '';
+                    elm.className = elm.className.replace(' xray-active', ' xray-inactive');
                 }
 
             });

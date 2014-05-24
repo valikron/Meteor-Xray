@@ -20,6 +20,12 @@
     visibility: hidden;
 }
 
+.xray-label-container .xray-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
 .xray-visible {
     border: 2px solid rgb(41, 128, 185) !important;
     position: relative;
@@ -42,15 +48,15 @@
     transition: border 500ms;
 }
 
-.xray-visible .xray-label-container.xray-active {
+.xray-label-container.xray-active {
     background-color: rgba(8, 66, 134, 0.13);
 }
 
-.xray-visible .xray-label-container.xray-inactive {
+.xray-label-container.xray-inactive {
     background-color: rgba(8, 66, 134, 0.42);
 }
 
-.xray-visible .xray-label-container .xray-label{
+.xray-label-container .xray-label{
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
     font-size: 1.4rem !important;
     font-weight: 400 !important;
@@ -62,21 +68,21 @@
     letter-spacing: 0.02rem !important;
 }
 
-.xray-visible .xray-label-container.xray-active .xray-label{
+.xray-label-container.xray-active .xray-label{
     font-size: 1.7rem !important;
     background-color: rgba(41, 128, 185, 0.9);
 }
 
-.xray-visible .xray-label-container.xray-inactive .xray-label{
+.xray-label-container.xray-inactive .xray-label{
     font-size: 1.4rem !important;
     background-color: rgba(41, 128, 185, 0.42);
 }
-.xray-visible .xray-label-container .xray-label .xray-extra,
-.xray-visible .xray-label-container.xray-inactive .xray-label .xray-extra {
+.xray-label-container .xray-extra,
+.xray-label-container.xray-inactive .xray-extra {
     display: none;
 }
 
-.xray-visible .xray-label-container.xray-active .xray-label .xray-extra {
+.xray-label-container.xray-active .xray-extra {
     display: block;
     position: absolute;
     top: 3.3em;
@@ -94,35 +100,35 @@
     font-size: 1.2rem !important;
 }
 
-.xray-visible .xray-label-container.xray-active .xray-label .xray-extra .xray-extra-devider {
+.xray-label-container.xray-active .xray-extra-devider {
     padding: 4px 0;
     font-weight: 700 !important;
     font-size: 1.4rem;
 }
 
-.xray-visible .xray-label-container.xray-active .xray-label .xray-extra .xray-extra-devider .xray-extra-value {
+.xray-label-container.xray-active .xray-extra-value {
     padding: 0 5px;
     font-weight: 400 !important;
 }
 
-.xray-visible .xray-label-container.xray-active .xray-label .xray-extra .xray-extra-devider .xray-extra-value .xray-keyName {
+.xray-label-container.xray-active .xray-keyName {
     color: rgb(21, 138, 165);
     font-weight: 500 !important;
     font-size: 1.3rem;
 }
 
-.xray-visible .xray-label-container.xray-active .xray-label .xray-extra .xray-extra-devider .xray-extra-value:nth-of-type(odd) {
+.xray-label-container.xray-active .xray-extra-value:nth-of-type(odd) {
     background-color: rgba(223,233,223,.4);
     border-bottom: 1px solid rgb(200,223,233);
     padding: 2px 4px;
 }
-.xray-visible .xray-label-container.xray-active .xray-label .xray-extra .xray-extra-devider .xray-extra-value:nth-of-type(even) {
+.xray-label-container.xray-active .xray-extra-value:nth-of-type(even) {
     background-color: rgba(203,213,203,.4);
     border-bottom: 1px solid rgb(200,223,233);
     padding: 2px 4px;
 }
 
-.xray-visible .xray-label-container.xray-active .xray-label .xray-extra:before {
+.xray-label-container.xray-active .xray-extra:before {
     content: ' ';
     position: absolute;
     top: -9px;
@@ -134,8 +140,4 @@
     border-bottom: 16px solid rgb(243,253,243);
 }
 
-.xray-visible .xray-label-container .xray-label {
-    position: absolute;
-    top: 0;
-    left: 0;
-}
+
