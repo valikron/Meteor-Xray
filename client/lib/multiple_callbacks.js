@@ -19,9 +19,17 @@ _.each(evtNames, function(evtName, i) {
                         callbacks = null,
                         nameSpace = '_' + evtName + '_callbacks';
 
+                    if (evtName === 'created'){
+                        self.createdTime = new Date();
+                    }
+
                     self.templateName = tplName;
 
                     superFunc.bind(self)();
+
+                    if (evtName === 'rendered') {
+                        self.performTime = (new Date()) - self.createdTime;
+                    }
 
                     if (Template.hasOwnProperty(nameSpace)) {
                         callbacks = _.union(Template[nameSpace][tplName], Template[nameSpace][null]);

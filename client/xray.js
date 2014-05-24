@@ -1,5 +1,6 @@
 var xrayVisible = false;
 var rayCounter = 0;
+var systemProperties = ['guid','__helperHost','created','destroyed','_events','events','__proto__','render','rendered','set','parent','preserve','dom','extend','get','helpers','instantiate','isDestroyed','isInited','kind','lookup','lookupTemplate','notifyParented'];
 
 Meteor.startup(function() {
     UI.materialize(Template.xray, document.body);
@@ -28,7 +29,7 @@ Template.xray.events({
     }
 });
 
-var attributeListFromObject = function(object) {
+var attrListFromObject = function(object) {
     var result = [];
     _.each(object, function(value, name) {
         if (value && name) {
@@ -43,10 +44,9 @@ var attributeListFromObject = function(object) {
 };
 
 var store_boundary = function(box) {
-    var area = {};
     var offset = box.offset();
 
-    area = {
+    var area = {
         x1: offset.left,
         y1: offset.top,
         x2: offset.left + box.width(),
@@ -74,7 +74,7 @@ var cleanupElement = function (elm, resetIndex) {
     elm.className = elm.className.replace(' xray-active', '');
 };
 
-var renderAttributeListToDiv = function(name, list, parent) {
+var renderAttrListToDiv = function(name, list, parent) {
     if (list.length) {
         var container = document.createElement('DIV');
         var attribute;
@@ -97,15 +97,15 @@ var renderAttributeListToDiv = function(name, list, parent) {
 var renderToDiv = function(options) {
     options = options || {};
 
+    var div = document.createElement('DIV'),
+        innderDiv = document.createElement('DIV'),
+        extra = document.createElement('DIV'),
+        performTimeLabel = document.createElement('DIV');
+
     rayCounter++;
 
-    var div = document.createElement('DIV');
-    var innderDiv = document.createElement('DIV');
     innderDiv.className = 'xray-label';
     div.appendChild(innderDiv);
-
-    var extra = document.createElement('DIV');
-    var performTimeLabel = document.createElement('DIV');
     performTimeLabel.innerHTML = 'Rendertime: <span class="xray-keyName">' + (options.performTime / 1000) + 's</span>';
     performTimeLabel.className = ' xray-extra-devider';
     extra.appendChild(performTimeLabel);
@@ -113,67 +113,34 @@ var renderToDiv = function(options) {
     innderDiv.appendChild(extra);
 
 
-    renderAttributeListToDiv('Attributes', options.attributesList, extra);
-    renderAttributeListToDiv('Helpers', options.helpersList, extra);
-    renderAttributeListToDiv('Events', options.events, extra);
+    renderAttrListToDiv('Attributes', options.attributesList, extra);
+    renderAttrListToDiv('Helpers', options.helpersList, extra);
+    renderAttrListToDiv('Events', options.events, extra);
 
     div.className = ' xray-label-container xray-id-' + rayCounter;
     UI.materialize(options.tplName, innderDiv);
     return div;
 };
 
-
-Template.created(null, function() {
-    var self = this;
-    self.createdTime = new Date();
-});
-
 var xrayRegionsLength = 0;
 var xrayRegions = [];
 Template.rendered(null, function() {
     var self = this;
 
-    self.performTime = (new Date()) - self.createdTime;
-
-
     if (self.templateName !== 'xray') {
-        // get direct childs
-        var childs = self.findAll('>*');
-        var mousePos = [0, 0];
-        var attributes = _.omit(self.__component__.__proto__, [
-            'guid',
-            '__helperHost',
-            'created',
-            'destroyed',
-            '_events',
-            'events',
-            '__proto__',
-            'render',
-            'rendered',
-            'set',
-            'parent',
-            'preserve',
-            'dom',
-            'extend',
-            'get',
-            'helpers',
-            'instantiate',
-            'isDestroyed',
-            'isInited',
-            'kind',
-            'lookup',
-            'lookupTemplate',
-            'notifyParented'
-        ]);
 
-        var renderOptions = {};
-        var templateLabel;
+        var childs = self.findAll('>*'),
+            mousePos = [0, 0],
+            attributes = _.omit(self.__component__.__proto__, systemProperties),
+            renderOptions = {},
+            templateLabel,
+            minSize;
 
         renderOptions.tplName = self.templateName;
         renderOptions.performTime = self.performTime;
-        renderOptions.attributesList = attributeListFromObject(attributes);
-        renderOptions.helpersList = attributeListFromObject(self.__component__.__proto__.helpers);
-        renderOptions.events = attributeListFromObject(self.__component__.__proto__.events);
+        renderOptions.attributesList = attrListFromObject(attributes);
+        renderOptions.helpersList = attrListFromObject(self.__component__.__proto__.helpers);
+        renderOptions.events = attrListFromObject(self.__component__.__proto__.events);
 
         _.each(childs, function(child) {
             templateLabel = renderToDiv(renderOptions);
@@ -185,7 +152,7 @@ Template.rendered(null, function() {
         document.addEventListener('mousemove', function(evt) {
             evt = (evt) ? evt : ((window.event) ? window.event : "");
 
-            var minSize = {};
+            minSize = {};
             mousePos[0] = evt.pageX;
             mousePos[1] = evt.pageY;
 
