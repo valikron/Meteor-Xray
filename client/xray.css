@@ -47,7 +47,6 @@
 }
 
 .xray-label-container.xray-active {
-    z-index: 9999;
     background-color: rgba(8, 66, 134, 0.13);
     border: 4px solid rgb(101, 188, 245);
 }

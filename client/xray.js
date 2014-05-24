@@ -182,6 +182,7 @@ Template.rendered(null, function() {
                             if (lastActive.area.width > minSize.width || lastActive.area.height > minSize.height) {
                                 cleanupElement(lastActive, 1);
                             } else {
+                                elm.style.zIndex = 9999;
                                 if (lastActive.className.indexOf('xray-active') < 0) {
                                     elm.className += ' xray-active';
                                 }
