@@ -52,10 +52,6 @@
     background-color: rgba(8, 66, 134, 0.13);
 }
 
-.xray-label-container.xray-inactive {
-    background-color: rgba(8, 66, 134, 0.42);
-}
-
 .xray-label-container .xray-label{
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
     font-size: 1.4rem !important;
@@ -73,12 +69,7 @@
     background-color: rgba(41, 128, 185, 0.9);
 }
 
-.xray-label-container.xray-inactive .xray-label{
-    font-size: 1.4rem !important;
-    background-color: rgba(41, 128, 185, 0.42);
-}
-.xray-label-container .xray-extra,
-.xray-label-container.xray-inactive .xray-extra {
+.xray-label-container .xray-extra{
     display: none;
 }
 

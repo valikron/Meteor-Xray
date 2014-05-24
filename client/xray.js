@@ -12,29 +12,19 @@ Template.xray.label = function() {
 
 Template.xray.events({
     'click button': function(e, tpl) {
-        var regions;
+        var regions = document.body.querySelectorAll( (xrayVisible) ? '.xray-visible' : '.xray' );
 
-        if (!xrayVisible) {
-            regions = document.body.querySelectorAll('.xray');
+        Session.set('xray-label', (xrayVisible) ? 'xray on' : 'xray off');
 
-            Session.set('xray-label', 'xray off');
+        _.each(regions, function(region) {
+            if (xrayVisible) {
+                region.className = region.className.replace(' xray-visible', ' xray');
+            } else {
+                region.className = region.className.replace(' xray', ' xray-visible');
+            }
+        });
 
-            _.each(regions, function(region) {
-                region.className = region.className.replace('xray', 'xray-visible');
-            });
-
-            xrayVisible = !xrayVisible;
-        } else {
-            regions = document.body.querySelectorAll('.xray-visible');
-
-            Session.set('xray-label', 'xray on');
-
-            _.each(regions, function(region) {
-                region.className = region.className.replace('xray-visible', 'xray');
-            });
-
-            xrayVisible = !xrayVisible;
-        }
+        xrayVisible = !xrayVisible;
     }
 });
 
@@ -53,10 +43,10 @@ var attributeListFromObject = function(object) {
 };
 
 var store_boundary = function(box) {
-    var box_area = {};
+    var area = {};
     var offset = box.offset();
 
-    box_area = {
+    area = {
         x1: offset.left,
         y1: offset.top,
         x2: offset.left + box.width(),
@@ -65,16 +55,23 @@ var store_boundary = function(box) {
         height: box.height()
     };
 
-    return box_area;
+    return area;
 };
 
-var is_mouse_in_area = function(pos, box_area) {
-    if (pos[0] >= box_area.x1 && pos[0] <= box_area.x2) {
-        if (pos[1] >= box_area.y1 && pos[1] <= box_area.y2) {
+var is_mouse_in_area = function(pos, area) {
+    if (pos[0] >= area.x1 && pos[0] <= area.x2) {
+        if (pos[1] >= area.y1 && pos[1] <= area.y2) {
             return true;
         }
     }
     return false;
+};
+
+var cleanupElement = function (elm, resetIndex) {
+    elm.active = false;
+    elm.style.zIndex = resetIndex;
+    elm.style.border = '';
+    elm.className = elm.className.replace(' xray-active', '');
 };
 
 var renderAttributeListToDiv = function(name, list, parent) {
@@ -87,7 +84,7 @@ var renderAttributeListToDiv = function(name, list, parent) {
 
         _.each(list, function(item) {
             attribute = document.createElement('DIV');
-            attribute.className = ' xray-extra-value';
+            attribute.className = 'xray-extra-value';
             attribute.innerHTML = '<span class="xray-keyName"> ' + item.keyName + ' </span> : ' + item.returnType;
             container.appendChild(attribute);
         });
@@ -194,28 +191,24 @@ Template.rendered(null, function() {
 
             _.each(xrayRegions, function(elm) {
 
-                elm.box_area = store_boundary($(elm));
+                elm.area = store_boundary($(elm));
 
-                if (is_mouse_in_area(mousePos, elm.box_area)) {
+                if (is_mouse_in_area(mousePos, elm.area)) {
 
-                    if (!minSize.width || !minSize.height || elm.box_area.width < minSize.width || elm.box_area.height < minSize.height) {
-                        minSize.width = elm.box_area.width;
-                        minSize.height = elm.box_area.height;
+                    if (!minSize.width || !minSize.height || elm.area.width < minSize.width || elm.area.height < minSize.height) {
+                        minSize.width = elm.area.width;
+                        minSize.height = elm.area.height;
                     }
 
                     elm.active = true;
 
                     _.each(xrayRegions, function(lastActive) {
                         if (lastActive.active) {
-                            if (lastActive.box_area.width > minSize.width || lastActive.box_area.height > minSize.height) {
-                                lastActive.style.zIndex = 1;
-                                lastActive.style.border = '';
-                                lastActive.style.borderRadius = 0;
-                                lastActive.className = lastActive.className.replace(' xray-active', '');
+                            if (lastActive.area.width > minSize.width || lastActive.area.height > minSize.height) {
+                                cleanupElement(lastActive, 1);
                             } else {
                                 elm.style.zIndex = 9999;
                                 elm.style.border = '4px solid rgb(101, 188, 245)';
-                                elm.className = elm.className.replace(' xray-inactive', '');
                                 if (lastActive.className.indexOf('xray-active') < 0) {
                                     elm.className += ' xray-active';
                                 }
@@ -225,10 +218,7 @@ Template.rendered(null, function() {
                     });
 
                 } else if (elm.active) {
-                    elm.active = false;
-                    elm.style.zIndex = null;
-                    elm.style.border = '';
-                    elm.className = elm.className.replace(' xray-active', ' xray-inactive');
+                    cleanupElement(elm, null);
                 }
 
             });
