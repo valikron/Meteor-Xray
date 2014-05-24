@@ -129,23 +129,67 @@ Template.xray.events({
     }
 });
 
+var renderActiveRegion = function(evt) {
+    if (!xrayVisible)
+        return;
+
+    evt = (evt) ? evt : ((window.event) ? window.event : "");
+
+    var mp = [0, 0],
+        min = {};
+
+    mp[0] = evt.pageX;
+    mp[1] = evt.pageY;
+
+    _.each(xrayRegions, function(region) {
+        region.area = store_boundary($(region));
+
+        if (is_mouse_in_area(mp, region.area)) {
+
+            if (!min.width || !min.height || region.area.width < min.width || region.area.height < min.height) {
+                min.width = region.area.width;
+                min.height = region.area.height;
+            }
+
+            region.active = true;
+
+            _.each(xrayRegions, function(lastActive) {
+                if (lastActive.active) {
+                    if (lastActive.area.width > min.width || lastActive.area.height > min.height) {
+                        cleanupElement(lastActive, 1);
+                    } else {
+                        region.style.zIndex = 9999;
+                        if (lastActive.className.indexOf('xray-active') < 0) {
+                            region.className += ' xray-active';
+                        }
+
+                    }
+                }
+            });
+
+        } else if (region.active) {
+            cleanupElement(region, null);
+        }
+
+    });
+};
+
 Template.rendered(null, function() {
     var self = this;
+    var proto = self.__component__.__proto__;
 
     if (self.templateName !== 'xray') {
 
         var childs = self.findAll('>*'),
-            mousePos = [0, 0],
-            attributes = _.omit(self.__component__.__proto__, sysProperties),
+            attributes = _.omit(proto, sysProperties),
             renderOptions = {},
-            templateLabel,
-            minSize;
+            templateLabel;
 
         renderOptions.tplName = self.templateName;
         renderOptions.performTime = self.performTime;
         renderOptions.attributesList = attrListFromObject(attributes);
-        renderOptions.helpersList = attrListFromObject(self.__component__.__proto__.helpers);
-        renderOptions.events = attrListFromObject(self.__component__.__proto__.events);
+        renderOptions.helpersList = attrListFromObject(proto.helpers);
+        renderOptions.events = attrListFromObject(proto.events);
 
         _.each(childs, function(child) {
             templateLabel = renderToDiv(renderOptions);
@@ -154,49 +198,6 @@ Template.rendered(null, function() {
             child.insertBefore(templateLabel, child.firstNode);
         });
 
-        document.addEventListener('mousemove', function(evt) {
-            if (!xrayVisible)
-                return;
-
-            evt = (evt) ? evt : ((window.event) ? window.event : "");
-
-            minSize = {};
-            mousePos[0] = evt.pageX;
-            mousePos[1] = evt.pageY;
-
-            _.each(xrayRegions, function(elm) {
-
-                elm.area = store_boundary($(elm));
-
-                if (is_mouse_in_area(mousePos, elm.area)) {
-
-                    if (!minSize.width || !minSize.height || elm.area.width < minSize.width || elm.area.height < minSize.height) {
-                        minSize.width = elm.area.width;
-                        minSize.height = elm.area.height;
-                    }
-
-                    elm.active = true;
-
-                    _.each(xrayRegions, function(lastActive) {
-                        if (lastActive.active) {
-                            if (lastActive.area.width > minSize.width || lastActive.area.height > minSize.height) {
-                                cleanupElement(lastActive, 1);
-                            } else {
-                                elm.style.zIndex = 9999;
-                                if (lastActive.className.indexOf('xray-active') < 0) {
-                                    elm.className += ' xray-active';
-                                }
-
-                            }
-                        }
-                    });
-
-                } else if (elm.active) {
-                    cleanupElement(elm, null);
-                }
-
-            });
-        }, false);
-
+        document.addEventListener('mousemove', renderActiveRegion, false);
     }
 });
