@@ -182,8 +182,6 @@ Template.rendered(null, function() {
                             if (lastActive.area.width > minSize.width || lastActive.area.height > minSize.height) {
                                 cleanupElement(lastActive, 1);
                             } else {
-                                elm.style.zIndex = 9999;
-                                elm.style.border = '4px solid rgb(101, 188, 245)';
                                 if (lastActive.className.indexOf('xray-active') < 0) {
                                     elm.className += ' xray-active';
                                 }
