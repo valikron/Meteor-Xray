@@ -1,6 +1,7 @@
 Package.describe({
   summary: 'Reveal template names in your meteor project',
   version: "0.2.0",
+  git: "https://github.com/Slava/Meteor-Xray.git",
   // this package should be disabled in production
   debugOnly: true
 });
