@@ -3,47 +3,48 @@ var methodNames = ['Created', 'Rendered', 'Destroyed'];
 
 
 _.each(evtNames, function(evtName, i) {
-    Template[evtName] = function(tplName, callback) {
-        var _base, namespace = '_' + evtName + '_callbacks';
-        Template[namespace] || (Template[namespace] = {});
-        (_base = Template[namespace])[tplName] || (_base[tplName] = []);
-        return Template[namespace][tplName].push(callback);
-    };
+  Template[evtName] = function(tplName, callback) {
+    var _base, namespace = '_' + evtName + '_callbacks';
+    Template[namespace] || (Template[namespace] = {});
+    (_base = Template[namespace])[tplName] || (_base[tplName] = []);
+    return Template[namespace][tplName].push(callback);
+  };
 
-    var _bootstrap = function () {
-        return _.each(Template, function(tpl, tplName) {
-            if (tpl.kind === 'Template_' + tplName) {
-                var superFunc = Template[tplName][evtName] || function () {};
-                return Template[tplName][evtName] = function() {
-                    var self = this,
-                        callbacks = null,
-                        nameSpace = '_' + evtName + '_callbacks';
+  var bootstrap = function () {
+    var templateKeys = _.keys(Template);
+    return _.each(templateKeys, function(tplName) {
+      var tpl = Template[tplName];
+      if (tpl && tpl.viewName === 'Template.' + tplName) {
+        var superFunc = Template[tplName][evtName] || function () {};
+        return Template[tplName][evtName] = function() {
+          var self = this,
+          callbacks = null,
+          nameSpace = '_' + evtName + '_callbacks';
 
-                    self.templateName = tplName;
+          self.templateName = tplName;
 
-                    superFunc.bind(self)();
+          superFunc.bind(self)();
 
-                    if (Template.hasOwnProperty(nameSpace)) {
-                        callbacks = _.union(Template[nameSpace][tplName], Template[nameSpace][null]);
-                    }
+          if (Template.hasOwnProperty(nameSpace)) {
+            callbacks = _.union(Template[nameSpace][tplName],
+                                Template[nameSpace][null]);
+          }
 
-                    return _.each(callbacks, function(func) {
-                        return func && func.bind(self)();
-                    });
-                };
-            }
-        });
-    };
+          return _.each(callbacks, function(func) {
+            return func && func.bind(self)();
+          });
+        };
+      }
+    });
+  };
 
-    var bootstrap = Meteor._wrapAsync(_bootstrap)
-
-    Template['bootstrap' + methodNames[i] + 'Callbacks'] = bootstrap;
+  Template['bootstrap' + methodNames[i] + 'Callbacks'] = bootstrap;
 });
 
 Meteor.startup(function () {
-    Template.bootstrapCreatedCallbacks();
-    Template.bootstrapRenderedCallbacks();
-    Template.bootstrapDestroyedCallbacks();
+  Template.bootstrapCreatedCallbacks();
+  Template.bootstrapRenderedCallbacks();
+  Template.bootstrapDestroyedCallbacks();
 });
 
 
